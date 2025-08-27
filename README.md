@@ -16,4 +16,13 @@
 
 - Install and Setup Better Auth for secure login, [https://www.better-auth.com/docs/installation](https://www.better-auth.com/docs/installation)
   - `pnpm add better-auth`
+
 # nischal-lms
+
+## Database Prisma Setup
+
+- Install Prisma, [https://www.prisma.io/docs/guides/embed-studio-nextjs](https://www.prisma.io/docs/guides/embed-studio-nextjs)
+  OR
+  - `pnpm i @prisma/client`
+  - `pnpm i -D prisma`
+  - `pnpm dlx prisma init`
