@@ -42,7 +42,44 @@
 
 - Add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to `.env`
 
+### Better Auth session can be used in two ways:
+
+1. In server components
+2. In client components
+
+   - For server components
+
+     - use auth.ts file in `app/lib/auth.ts`
+     - use ` auth.api.getSession({headers: await headers()})`
+     - Response will be session as {session: {}, user: {}}
+     - Else session: null
+
+   - For client components
+     - use authClient.ts file in `app/lib/auth-client.ts`
+     - Response will be `{data: {session: {}, user: {}}, error: {}, isPending: boolean, isRefetching: boolean, refetch: () => Promise<void>}`
+     - Else `{data: null, error: null, isPending: true, isRefetching: false, refetch: () => Promise<void>}`
+
 ## T3 Env setup
 
 - Follow the instructions [https://env.t3.gg/docs/nextjs](https://env.t3.gg/docs/nextjs)
   - run `pnpm add @t3-oss/env-nextjs zod`
+
+## RESEND for emails/otp
+
+- Follow the instructions [https://resend.com/docs/send-with-nextjs](https://resend.com/docs/send-with-nextjs)
+
+  - run `pnpm add resend`
+
+- Add `RESEND_API_KEY` to `.env`
+- Create resend instance in `app/lib/resend.ts` using api key
+
+- Add `sendVerificationOTP` function in `app/lib/auth.ts` in pugins:[emailOTP ]
+- Add RESEND sending code in `app/lib/auth.ts` in `sendVerificationOTP` function
+- OR add custom `sendVerificationOTP` function in `app/lib/auth-client.ts` using any other email service
+
+- Also, add emailOTPClient() in `app/lib/auth-client.ts` plugin
+
+# Note: Only after adding emailOTP and emailOTPClient plugins in auth.ts and auth-client.ts, you can use `authClient.emailOtp.sendVerificationOtp({ email, type: "sign-in" })` in login form
+
+- Add `authClient.emailOtp.sendVerificationOtp({ email, type: "sign-in" })` in login form and handle the response
+- puglins:[emailOTP] in auth.ts can be handles the reset, if everything is working fine
