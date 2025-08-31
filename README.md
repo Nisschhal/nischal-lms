@@ -83,3 +83,52 @@
 
 - Add `authClient.emailOtp.sendVerificationOtp({ email, type: "sign-in" })` in login form and handle the response
 - puglins:[emailOTP] in auth.ts can be handles the reset, if everything is working fine
+
+## ARCHJET for Web Security
+
+Arcjet (for developers) is a tool that lets you easily add rate limiting, spam & bot protection, and fraud detection into your app with a simple API/SDK.
+
+- Follow the instructions [https://arcjet.com/docs/nextjs](https://arcjet.com/docs/nextjs)
+
+  - run `pnpm add @arcjet/next`
+  - create `lib/arcjet.ts` to create single instance of arcjet and use it in app/api/auth/[...all]/route.ts
+
+  ```TS
+    import arcjet, {
+  detectBot,
+  fixedWindow,
+  protectSignup,
+  sensitiveInfo,
+  shield,
+  slidingWindow,
+  } from "@arcjet/next"
+  import { env } from "./env"
+  export {
+  detectBot,
+  fixedWindow,
+  protectSignup,
+  sensitiveInfo,
+  shield,
+  slidingWindow,
+  }
+
+  export default arcjet({
+  key: env.ARCJET_API_KEY,
+  characteristics: ["fingerprint"],
+
+  // define base rule here, can also be empty if you don't want to use any
+  rules: [
+  shield({
+  mode: "LIVE",
+  }),
+  ],
+  })
+  ```
+
+  - add the code from the instructions in `app/api/auth/[...all]/route.ts`
+  - Copy paste for better-auth integration from [https://github.com/arcjet/arcjet-js/blob/main/examples/nextjs-better-auth/app/api/auth/%5B...all%5D/route.ts](https://github.com/arcjet/arcjet-js/blob/main/examples/nextjs-better-auth/app/api/auth/%5B...all%5D/route.ts)
+  - Replace `aj` with `arcjet` from the `lib/arcject.ts` which is default/fallback if userId is not provided to detect user/client
+
+# Note: for ip address install `pnpm install -S @arcjet/ip`
+
+# This will wrapp the better-auth api request and check arject added securities

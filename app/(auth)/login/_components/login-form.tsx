@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { authClient } from "@/lib/auth-client"
 import { emailOTP } from "better-auth/plugins"
-import { Github, Loader } from "lucide-react"
+import { Github, Loader, Send } from "lucide-react"
 import { useRouter } from "next/navigation"
 import React, { useState, useTransition } from "react"
 import { toast } from "sonner"
@@ -43,6 +43,13 @@ const LoginForm = () => {
 
   // Send email verification for sign in
   const sendEmailVerfication = async () => {
+    // check if email is valid
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    // if (!emailRegex.test(email)) {
+    //   toast.error("Invalid email")
+    //   return
+    // }
+
     startEmailTransition(async () => {
       await authClient.emailOtp.sendVerificationOtp({
         email,
@@ -53,7 +60,7 @@ const LoginForm = () => {
             toast.success("Email sent, check your inbox")
           },
           onError: (error) => {
-            toast.error("Error sending email")
+            toast.error(error.error.message || "Error sending email")
             console.log(`error sending email`, { error })
           },
         },
@@ -112,17 +119,20 @@ const LoginForm = () => {
           </div>
           {/* Submit button */}
           <Button
-            disabled={emailPending}
+            disabled={emailPending || !email}
             onClick={sendEmailVerfication}
             className="w-full"
           >
             {emailPending ? (
               <>
-                <Loader className="mr-2 h-4 w-4 animate-spin" />
+                <Loader className=" h-4 w-4 animate-spin" />
                 <span>Loading...</span>
               </>
             ) : (
-              "Continue with Email"
+              <>
+                <Send className="h-4 w-4" />
+                <span>Continue with Email</span>
+              </>
             )}
           </Button>
         </div>
