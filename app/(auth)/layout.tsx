@@ -25,7 +25,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         >
           <Image
             src="/logo.svg"
-            className="bg-[#a3570f] rounded-md p-1"
+            className="bg-[#6366f1] rounded-md p-1"
             alt="logo"
             width={32}
             height={32}
