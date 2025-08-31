@@ -49,7 +49,7 @@ const LoginForm = () => {
         type: "sign-in",
         fetchOptions: {
           onSuccess: () => {
-            router.push("/verify-request")
+            router.push("/verify-request?email=" + email)
             toast.success("Email sent, check your inbox")
           },
           onError: (error) => {
